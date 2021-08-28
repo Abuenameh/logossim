@@ -1,4 +1,5 @@
 {
+  "homepage": ".",
   "name": "@logossim/page",
   "version": "0.0.1",
   "private": true,
