@@ -77,7 +77,7 @@ export default class App extends Component {
     window.addEventListener('keydown', this.shortcutHandler);
     window.addEventListener('beforeunload', this.unloadHandler);
 
-    this.autoSaveInterval = setInterval(this.autoSave, 15000);
+    this.autoSaveInterval = setInterval(this.autoSave, 5000);
   }
 
   componentWillUnmount() {
