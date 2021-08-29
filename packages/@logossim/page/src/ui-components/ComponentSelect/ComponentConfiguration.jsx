@@ -108,7 +108,7 @@ const getInitialValues = component =>
 
 const getFormSubmitLabel = (isValid, editMode) => {
   if (!isValid) return 'Check form errors';
-  if (editMode) return 'Edit component';
+  if (editMode) return 'Save component';
   return 'Add to circuit';
 };
 
