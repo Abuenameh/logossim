@@ -128,8 +128,8 @@ const ComponentContextMenu = ({
     <Separator />
 
     <Item
-      onClick={({ props: component }) =>
-        configureComponent(component)
+      onClick={({ props }) =>
+        configureComponent(props.component)
       }
     >
       <ContextMenuIconContainer>
