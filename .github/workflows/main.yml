@@ -34,7 +34,9 @@ jobs:
 
       # Build
       - name: Build
-        run: yarn run build
+        run: |
+          npm install
+          yarn run build
 
       # Deploy
       - name: Deploy
