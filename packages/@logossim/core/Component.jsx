@@ -1,5 +1,5 @@
 import React from 'react';
-import { contextMenu } from 'react-contexify';
+import { MenuProvider } from 'react-contexify';
 
 import { AbstractReactFactory } from '@projectstorm/react-canvas-core';
 
@@ -29,14 +29,13 @@ export default class Component extends AbstractReactFactory {
   generateReactWidget(event) {
     const { Widget } = this;
     const { model } = event;
-    this.showMenu = e => contextMenu.show({id: "component", event: e, props: model})
 
     return (
-      <div onContextMenu={this.showMenu}>
+      <MenuProvider id="component" storeRef={false} data={model}>
         <ComponentContext.Provider value={model}>
           <Widget model={model} />
         </ComponentContext.Provider>
-      </div>
+      </MenuProvider>
     );
   }
 
