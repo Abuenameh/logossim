@@ -1,8 +1,11 @@
 import { BaseModel } from '@logossim/core';
 
 export default class ButtonModel extends BaseModel {
-  initialize() {
-    this.addOutputPort('out');
+  initialize(configurations) {
+    this.canRotate = true;
+    this.orientation = configurations.ORIENTATION;
+
+    this.addOutputPort('out', { orientation: this.orientation, offset: 0, length: 10 });
   }
 
   onSimulationStart() {

@@ -5,14 +5,17 @@ export default class XorModel extends BaseModel {
     this.behavior = configurations.MULTIPLE_INPUT_BEHAVIOR;
     this.dataBits = Number(configurations.DATA_BITS);
 
+    this.canRotate = true;
+    this.orientation = configurations.ORIENTATION;
+
     const INPUT_PORTS_NUMBER = Number(
       configurations.INPUT_PORTS_NUMBER,
     );
 
     for (let i = 0; i < INPUT_PORTS_NUMBER; i += 1) {
-      this.addInputPort(`in${i}`, { bits: this.dataBits });
+      this.addInputPort(`in${i}`, { bits: this.dataBits, orientation: (this.orientation + 2) % 4, offset: 2, length: -5 });
     }
-    this.addOutputPort('out', { bits: this.dataBits });
+    this.addOutputPort('out', { bits: this.dataBits, orientation: this.orientation, offset: 2, length: 10 });
   }
 
   executeBit(bits) {

@@ -28,9 +28,7 @@ const PIN_BORDER = {
 
 const PositionedPort = styled(Port)`
   position: absolute;
-  left: -7px;
-  top: 50%;
-  transform: translateY(-50%);
+  ${props => `${props.side}: ${props.position-2}px`};
 `;
 
 export const Shape = styled.div`
@@ -148,6 +146,13 @@ const OutputWidget = props => {
 
   const dataBits = Number(DATA_BITS);
 
+  const orientation = model.orientation;
+  const inputSides = ['right', 'bottom', 'left', 'top'];
+
+  const width = (OUTPUT_FORMAT === 'BITS') ? SHAPE_SIZES[dataBits].width : SHAPE_SIZES[4].width;
+  const height = (OUTPUT_FORMAT === 'BITS') ? SHAPE_SIZES[dataBits].height : SHAPE_SIZES[4].height;
+  const positions = [width, height, width, height];
+
   return (
     <Shape
       selected={selected}
@@ -159,7 +164,11 @@ const OutputWidget = props => {
           ? mapBits(model)
           : showAsNumber(model.getInput(), OUTPUT_FORMAT)}
       </PinContainer>
-      <PositionedPort name="in" />
+      <PositionedPort
+        name="in"
+        side={inputSides[orientation]}
+        position={positions[orientation]}
+      />
     </Shape>
   );
 };

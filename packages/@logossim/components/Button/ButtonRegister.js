@@ -9,7 +9,14 @@ export default new Component({
   name: 'Button',
   description: 'Simple button',
   group: 'Input & output',
-  configurations: [],
+  configurations: [
+    {
+      name: 'ORIENTATION',
+      type: 'hidden',
+      default: 0,
+      label: 'Orientation of component',
+    },
+  ],
   model,
   widget,
   icon,

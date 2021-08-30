@@ -53,7 +53,7 @@ export const Button = styled.button`
 
 const PositionedPort = styled(Port)`
   position: absolute;
-  right: -7px;
+  ${props => `${props.side}: 28px`};
 `;
 
 const ButtonWidget = props => {
@@ -79,9 +79,14 @@ const ButtonWidget = props => {
       document.removeEventListener('mouseup', handleReleaseAway);
   });
 
+  const outputSides = ['left', 'top', 'right', 'bottom'];
+
   return (
     <Shape selected={selected}>
-      <PositionedPort name="out" />
+      <PositionedPort
+        name="out"
+        side={outputSides[model.orientation]}
+      />
       <Button
         ref={buttonRef}
         onMouseDown={() => model.onClick()}

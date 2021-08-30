@@ -12,8 +12,8 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
 
-  width: 105px;
-  height: 90px;
+  width: ${props => props.width}px;
+  height: ${props => props.height}px;
 
   transition: 100ms linear;
   svg {
@@ -49,25 +49,25 @@ const PositionedPort = styled(Port)`
 
   ${props => {
     if (props.name === 'out') return '';
-    return `top: ${props.position * 15 - 5}px;`;
+    return `${props.edge}: ${props.position * 15 - 5}px;`;
   }}
 
   ${props => {
-    if (props.name === 'out') return 'right: -5px';
-    return 'left: -5px';
+    if (props.name === 'out') return `${props.side}: 100px`;
+    return `${props.side}: 103px`;
   }};
 `;
 
-export const Shape = ({ size = 90, portPositions = [] }) => (
+export const Shape = ({ size = 90, portPositions = [], dWidth = 15, dHeight = 0, vbWidth = 27.781249, vbHeight = 23.812501, orientation = 0, translation = 0, portWidth = 0.5, portColor }) => (
   <svg
-    height={size}
-    width={size + 15}
-    viewBox="0 0 27.781249 23.812501"
+    height={size + dHeight}
+    width={size + dWidth}
+    viewBox={`0 0 ${vbWidth} ${vbHeight}`}
     fill="var(--body-unselected)"
     stroke="var(--border-unselected)"
     strokeWidth="var(--border-width)"
   >
-    <g>
+    <g transform={`rotate(${orientation*90} 12 12) translate(${translation})`}>
       <path
         fill="none"
         style={{
@@ -84,22 +84,28 @@ export const Shape = ({ size = 90, portPositions = [] }) => (
         <circle r="5.72056" cy="45" cx="94.27944" />
       </g>
     </g>
-    <g strokeWidth={0.5}>
-      {portPositions.includes(1) && (
-        <path d="M 4.8860442,4.1010415 H 0.38245295" />
-      )}
-      {portPositions.includes(2) && (
-        <path d="M 5.3419835,8.0697915 H 0.38232292" />
-      )}
-      {portPositions.includes(3) && (
-        <path d="M 5.5975927,12.038541 H 0.38232292" />
-      )}
-      {portPositions.includes(4) && (
-        <path d="M 5.2516863,16.007291 H 0.38232292" />
-      )}
-      {portPositions.includes(5) && (
-        <path d="M 4.3916654,19.976041 H 0.38232292" />
-      )}
+    <g
+      transform={` rotate(${orientation*90} 12 12) translate(${translation})`}
+      strokeWidth={portWidth}
+      stroke={portColor}
+    >
+      <g transform="scale(0.26458333)">
+        {portPositions.includes(1) && (
+          <path d="M 18.4669,15.5 H 1.44549" />
+        )}
+        {portPositions.includes(2) && (
+          <path d="M 20.1902,30.5 H 1.445" />
+        )}
+        {portPositions.includes(3) && (
+          <path d="M 21.1563,45.5 H 1.445" />
+        )}
+        {portPositions.includes(4) && (
+          <path d="M 19.8489,60.5 H 1.445" />
+        )}
+        {portPositions.includes(5) && (
+          <path d="M 16.5984,75.5 H 1.445" />
+        )}
+      </g>
     </g>
   </svg>
 );
@@ -110,8 +116,26 @@ const XnorWidget = props => {
   const inputPorts = Object.values(model.getInputPorts());
   const portPositions = distributePorts(inputPorts.length);
 
+  const portWidth = inputPorts[0].getLineWidth();
+  const portColor = inputPorts[0].getLineColor();
+
+  const orientation = model.orientation;
+  const inputEdges = ['top', 'left', 'top', 'left'];
+  const inputSides = ['right', 'bottom', 'left', 'top'];
+  const outputSides = ['left', 'top', 'right', 'bottom'];
+
+  const dWidths = [15, 0]
+  const dHeights = [0, 15]
+  const vbWidths = [27.781249, 23.812501]
+  const vbHeights = [23.812501, 27.781249]
+  const translations = [0, 0, -4, -4]
+
   return (
-    <Wrapper selected={model.options.selected}>
+    <Wrapper
+      selected={model.options.selected}
+      width={90 + dWidths[orientation % 2]}
+      height={90 + dHeights[orientation % 2]}
+    >
       <PortExtension
         selected={model.isSelected()}
         portPositions={portPositions}
@@ -122,17 +146,34 @@ const XnorWidget = props => {
           <PositionedPort
             name={port.getName()}
             position={portPositions[i]}
+            edge={inputEdges[orientation]}
+            side={inputSides[orientation]}
           />
           {(portPositions[i] < 1 || portPositions[i] > 5) && (
             <PortExtensionConnector
               selected={model.isSelected()}
               position={portPositions[i]}
+              edge={inputEdges[orientation]}
+              side={inputSides[orientation]}
             />
           )}
         </Fragment>
       ))}
-      <PositionedPort name="out" />
-      <Shape portPositions={portPositions} />
+      <PositionedPort
+        name="out"
+        side={outputSides[orientation]}
+      />
+      <Shape
+        portPositions={portPositions}
+        dWidth={dWidths[orientation % 2]}
+        dHeight={dHeights[orientation % 2]}
+        vbWidth={vbWidths[orientation % 2]}
+        vbHeight={vbHeights[orientation % 2]}
+        orientation={orientation}
+        translation={translations[orientation]}
+        portWidth={portWidth}
+        portColor={portColor}
+      />
     </Wrapper>
   );
 };

@@ -6,13 +6,15 @@ import styled from 'styled-components';
 
 const PositionedPort = styled(Port)`
   position: absolute;
-  left: -7px;
-  top: 50%;
-  transform: translateY(-50%);
+  ${props => `${props.side}: 28px`};
 `;
 
 export const Shape = styled.div`
   position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   width: 30px;
   height: 30px;
@@ -35,6 +37,8 @@ const LedWidget = props => {
     options: { selected },
   } = model;
 
+  const inputSides = ['right', 'bottom', 'left', 'top'];
+
   return (
     <Shape
       selected={selected}
@@ -42,7 +46,10 @@ const LedWidget = props => {
       isActive={model.isActive()}
       data-testid="shape"
     >
-      <PositionedPort name="in" />
+      <PositionedPort
+        name="in"
+        side={inputSides[model.orientation]}
+      />
     </Shape>
   );
 };

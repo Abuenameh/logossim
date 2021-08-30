@@ -12,6 +12,8 @@ import {
   Cut,
   ZoomIn,
   ZoomOut,
+  RotateLeft,
+  RotateRight,
 } from '../Icons';
 import Key from '../Key/Key';
 import ContextMenuIconContainer from './ContextMenuIconContainer';
@@ -27,6 +29,8 @@ const ComponentContextMenu = ({
   redo,
   zoomIn,
   zoomOut,
+  rotateLeft,
+  rotateRight,
   configureComponent,
 }) => (
   <Menu id="component">
@@ -98,6 +102,36 @@ const ComponentContextMenu = ({
         <ZoomOut />
       </ContextMenuIconContainer>
       Zoom out
+    </Item>
+
+    <Separator />
+
+    <Item
+      onClick={({ props }) =>
+        rotateLeft(props.component)
+      }
+      disabled={({ props }) =>
+        !props.component.canRotate
+      }
+    >
+      <ContextMenuIconContainer>
+        <RotateLeft />
+      </ContextMenuIconContainer>
+      Rotate left
+    </Item>
+
+    <Item
+      onClick={({ props }) =>
+        rotateRight(props.component)
+      }
+      disabled={({ props }) =>
+        !props.component.canRotate
+      }
+    >
+      <ContextMenuIconContainer>
+        <RotateRight />
+      </ContextMenuIconContainer>
+      Rotate right
     </Item>
 
     <Separator />

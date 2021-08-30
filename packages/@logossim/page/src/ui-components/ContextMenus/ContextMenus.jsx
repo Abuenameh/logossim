@@ -15,6 +15,8 @@ const ContextMenus = ({
   redo,
   zoomIn,
   zoomOut,
+  rotateLeft,
+  rotateRight,
   configureComponent,
 }) => (
   <>
@@ -35,6 +37,8 @@ const ContextMenus = ({
       redo={redo}
       zoomIn={zoomIn}
       zoomOut={zoomOut}
+      rotateLeft={rotateLeft}
+      rotateRight={rotateRight}
       configureComponent={configureComponent}
     />
   </>

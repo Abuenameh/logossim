@@ -58,6 +58,12 @@ export default new Component({
         },
       ],
     },
+    {
+      name: 'ORIENTATION',
+      type: 'hidden',
+      default: 0,
+      label: 'Orientation of component',
+    },
   ],
   model,
   widget,

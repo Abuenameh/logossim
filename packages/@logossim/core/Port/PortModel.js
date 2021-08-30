@@ -26,6 +26,10 @@ export default class PortModel extends RDPortModel {
     this.bits = null;
     this.defaultFloatingValue = null;
     this.defaultErrorValue = null;
+    this.orientation = 0;
+    this.complemented = false;
+    this.offset = 0;
+    this.length = 25;
   }
 
   serialize() {
@@ -36,6 +40,10 @@ export default class PortModel extends RDPortModel {
       bits: this.bits,
       defaultFloatingValue: this.defaultFloatingValue,
       defaultErrorValue: this.defaultErrorValue,
+      orientation: this.orientation,
+      complemented: this.complemented,
+      offset: this.offset,
+      length: this.length,
     };
   }
 
@@ -46,6 +54,42 @@ export default class PortModel extends RDPortModel {
     this.bits = event.data.bits;
     this.defaultFloatingValue = event.data.defaultFloatingValue;
     this.defaultErrorValue = event.data.defaultErrorValue;
+    this.orientation = event.data.orientation;
+    this.complemented = event.data.componented;
+    this.offset = event.data.offset;
+    this.length = event.data.length;
+  }
+
+  setOrientation(orientation) {
+    this.orientation = orientation;
+  }
+
+  getOrientation() {
+    return this.orientation;
+  }
+
+  setComplemented(complemented) {
+    this.complemented = complemented;
+  }
+
+  getComplemented() {
+    return this.complemented;
+  }
+
+  setOffset(offset) {
+    this.offset = offset;
+  }
+
+  getOffset() {
+    return this.offset;
+  }
+
+  setLength(length) {
+    this.length = length;
+  }
+
+  getLength() {
+    return this.length;
   }
 
   setAsInput() {
@@ -144,5 +188,23 @@ export default class PortModel extends RDPortModel {
     if (link) return link.getColor();
 
     return 'var(--port-unconnected)';
+  }
+
+  getLineWidth() {
+    return getComputedStyle(document.body).getPropertyValue(
+      `--link-1-bit-width`,
+    );
+  }
+
+  getLineColor() {
+    return getComputedStyle(document.body).getPropertyValue(
+      `--link-${this.bits || 1}-bit-color`,
+    );
+  }
+
+  getPointRadius() {
+    return getComputedStyle(document.body).getPropertyValue(
+      `--link-${this.bits || 1}-bit-join-radius`,
+    );
   }
 }

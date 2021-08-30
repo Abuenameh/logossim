@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 const PositionedPort = styled(Port)`
   position: absolute;
-  right: -7px;
+  ${props => `${props.side}: 28px`};
 `;
 
 export const Shape = styled.div`
@@ -68,11 +68,16 @@ const ClockWidget = props => {
     periodMs,
   } = model;
 
+  const outputSides = ['left', 'top', 'right', 'bottom'];
+
   const out = model.getPort('out');
 
   return (
     <Shape selected={selected}>
-      <PositionedPort name="out" />
+      <PositionedPort
+        name="out"
+        side={outputSides[model.orientation]}
+      />
       <Decoration
         isActive={model.isActive()}
         color={out.getColor()}

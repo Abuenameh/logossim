@@ -7,10 +7,13 @@ export default class NandModel extends BaseModel {
     );
     this.dataBits = Number(configurations.DATA_BITS);
 
+    this.canRotate = true;
+    this.orientation = configurations.ORIENTATION;
+
     for (let i = 0; i < INPUT_PORTS_NUMBER; i += 1) {
-      this.addInputPort(`in${i}`, { bits: this.dataBits });
+      this.addInputPort(`in${i}`, { bits: this.dataBits, orientation: (this.orientation + 2) % 4, offset: 2, length: 10 });
     }
-    this.addOutputPort('out', { bits: this.dataBits });
+    this.addOutputPort('out', { bits: this.dataBits, orientation: this.orientation, offset: 2, length: 13 });
   }
 
   executeBit(bits) {

@@ -13,8 +13,8 @@ const Wrapper = styled.div`
   width: 30px;
   height: 30px;
 
-  transition: 100ms linear;
   svg {
+    transition: 100ms linear;
     fill: ${props =>
       props.selected
         ? 'var(--body-selected)'
@@ -29,13 +29,13 @@ const Wrapper = styled.div`
 const PositionedPort = styled(Port)`
   position: absolute;
   ${props => {
-    if (props.name === 'in') return 'left: -5px;';
-    if (props.name === 'out') return 'right: -5px;';
+    if (props.name === 'in') return `${props.side}: 29px;`;
+    if (props.name === 'out') return `${props.side}: 29px;`;
     return '';
   }}
 `;
 
-export const Shape = ({ size = 30 }) => (
+export const Shape = ({ size = 30, orientation }) => (
   <svg
     height={size}
     width={size}
@@ -44,7 +44,12 @@ export const Shape = ({ size = 30 }) => (
     stroke="var(--border-unselected)"
     strokeWidth="var(--border-width)"
   >
-    <g>
+    <g
+      style={{
+        transform: `rotate(${orientation*90}deg)`,
+        transformOrigin: 'center',
+      }}
+    >
       <path d="M 1.0207771,1.6492624 V 43.357967 L 42.724327,22.649262 Z" />
     </g>
   </svg>
@@ -56,11 +61,21 @@ const BufferWidget = props => {
     options: { selected },
   } = model;
 
+  const orientation = model.orientation;
+  const inputSides = ['right', 'bottom', 'left', 'top'];
+  const outputSides = ['left', 'top', 'right', 'bottom'];
+
   return (
     <Wrapper selected={selected}>
-      <PositionedPort name="in" />
-      <PositionedPort name="out" />
-      <Shape />
+      <PositionedPort
+        name="in"
+        side={inputSides[orientation]}
+      />
+      <PositionedPort
+        name="out"
+        side={outputSides[orientation]}
+      />
+      <Shape orientation={orientation} />
     </Wrapper>
   );
 };

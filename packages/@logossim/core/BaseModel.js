@@ -13,6 +13,8 @@ export default class BaseModel extends NodeModel {
   constructor(configurations = {}, type = 'generic') {
     super({ type });
 
+    this.canRotate = false;
+
     this.initialize(configurations);
 
     this.configurations = configurations;
@@ -25,24 +27,32 @@ export default class BaseModel extends NodeModel {
     };
   }
 
-  addInputPort(nameOrInstance, { bits, floating, error } = {}) {
+  addInputPort(nameOrInstance, { bits, floating, error, orientation, complemented, offset, length } = {}) {
     const port = getPort(nameOrInstance);
     port.setAsInput();
     if (typeof nameOrInstance === 'string') {
       port.setBits(bits || 1);
       port.setDefaultFloatingValue(floating ?? 'x');
       port.setDefaultErrorValue(error ?? 'e');
+      port.setOrientation(orientation ?? 0);
+      port.setComplemented(complemented ?? false);
+      port.setOffset(offset ?? 0);
+      port.setLength(length ?? 25);
     }
     super.addPort(port);
   }
 
-  addOutputPort(nameOrInstance, { bits } = {}) {
+  addOutputPort(nameOrInstance, { bits, orientation, complemented, offset, length } = {}) {
     const port = getPort(nameOrInstance);
     port.setAsOutput();
     if (typeof nameOrInstance === 'string') {
       port.setBits(bits || 1);
       port.setDefaultFloatingValue('x');
       port.setDefaultErrorValue('e');
+      port.setOrientation(orientation ?? 0);
+      port.setComplemented(complemented ?? false);
+      port.setOffset(offset ?? 0);
+      port.setLength(length ?? 25);
     }
     super.addPort(port);
   }

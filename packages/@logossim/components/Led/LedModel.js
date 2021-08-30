@@ -8,7 +8,10 @@ export default class LedModel extends BaseModel {
       off: configurations.OFF_COLOR,
     };
 
-    this.addInputPort('in');
+    this.canRotate = true;
+    this.orientation = configurations.ORIENTATION;
+
+    this.addInputPort('in', { orientation: (this.orientation + 2) % 4, offset: 0, length: 10 });
   }
 
   getInput() {

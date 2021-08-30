@@ -132,6 +132,11 @@ const Input = ({
           />
         </>
       );
+    case 'hidden':
+      return (
+        <>
+        </>
+      );
     default:
       throw new Error(
         `[logossim] Invalid configuration type for ${componentType}: ${type}`,

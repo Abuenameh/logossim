@@ -1,8 +1,11 @@
 import { BaseModel } from '@logossim/core';
 
 export default class SwitchModel extends BaseModel {
-  initialize() {
-    this.addOutputPort('out');
+  initialize(configurations) {
+    this.canRotate = true;
+    this.orientation = configurations.ORIENTATION;
+
+    this.addOutputPort('out', { orientation: this.orientation, offset: 2, length: 8 });
   }
 
   onSimulationStart() {

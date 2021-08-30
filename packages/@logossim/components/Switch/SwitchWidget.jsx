@@ -6,9 +6,7 @@ import styled from 'styled-components';
 
 const PositionedPort = styled(Port)`
   position: absolute;
-  right: -7px;
-  top: 50%;
-  transform: translateY(-50%);
+  ${props => `${props.side}: ${props.position-2}px`};
 `;
 
 export const Shape = styled.div`
@@ -18,7 +16,7 @@ export const Shape = styled.div`
   justify-content: center;
   align-items: center;
 
-  width: 45px;
+  width: 60px;
   height: 30px;
 
   background: ${props =>
@@ -38,7 +36,7 @@ export const Switch = styled.button`
   align-items: center;
   justify-content: center;
 
-  width: 40px;
+  width: 55px;
   height: 24px;
   margin: 2px;
 
@@ -52,7 +50,7 @@ export const Switch = styled.button`
 
 export const SwitchValue = styled.div`
   transform: ${props =>
-    props.isActive ? 'translateX(6px)' : 'translateX(-6px)'};
+    props.isActive ? 'translateX(14px)' : 'translateX(-14px)'};
 
   width: 15px;
   height: 15px;
@@ -68,12 +66,20 @@ const SwitchWidget = props => {
     options: { selected },
   } = model;
 
+  const orientation = model.orientation;
+  const outputSides = ['left', 'top', 'right', 'bottom'];
+  const positions = [60, 30, 60, 30];
+
   return (
     <Shape selected={selected}>
       <Switch onClick={() => model.onClick()}>
         <SwitchValue isActive={model.isActive()} />
       </Switch>
-      <PositionedPort name="out" />
+      <PositionedPort
+        name="out"
+        side={outputSides[orientation]}
+        position={positions[orientation]}
+      />
     </Shape>
   );
 };

@@ -9,8 +9,7 @@ const SEGMENTS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'dp'];
 const PositionedPort = styled(Port)`
   position: absolute;
   left: ${props => props.position.horizontal}px;
-  top: ${props => props.position.vertical}px;
-  transform: translateY(-50%);
+  ${props => `${props.side}: ${(props.icon ? 36 : 90) - 2}px;`}
 `;
 
 export const Wrapper = styled.div`
@@ -124,6 +123,7 @@ const LedWidget = props => {
           key={segment}
           name={segment}
           position={model.getPositionForSegment(segment)}
+          side={model.getSideForSegment(segment)}
         />
       ))}
     </Wrapper>

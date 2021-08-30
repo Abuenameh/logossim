@@ -5,7 +5,10 @@ export default class BuzzerModel extends BaseModel {
     this.frequencyHz = Number(configurations.FREQUENCY_HZ);
     this.waveform = configurations.WAVEFORM;
 
-    this.addInputPort('in');
+    this.canRotate = true;
+    this.orientation = configurations.ORIENTATION;
+
+    this.addInputPort('in', { orientation: (this.orientation + 2) % 4, offset: 0, length: 10 });
   }
 
   onSimulationStart() {

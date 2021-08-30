@@ -17,6 +17,8 @@ import Stop from './Stop';
 import Undo from './Undo';
 import ZoomIn from './ZoomIn';
 import ZoomOut from './ZoomOut';
+import RotateLeft from './RotateLeft';
+import RotateRight from './RotateRight';
 
 export {
   ArrowLeft,
@@ -38,4 +40,6 @@ export {
   Undo,
   ZoomIn,
   ZoomOut,
+  RotateLeft,
+  RotateRight,
 };

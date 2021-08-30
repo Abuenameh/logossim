@@ -5,7 +5,10 @@ export default class InputModel extends BaseModel {
     this.dataBits = Number(configurations.DATA_BITS);
     this.threeState = configurations.THREE_STATE === 'true';
 
-    this.addOutputPort('out', { bits: this.dataBits });
+    this.canRotate = true;
+    this.orientation = configurations.ORIENTATION;
+
+    this.addOutputPort('out', { bits: this.dataBits, orientation: this.orientation, offset: 0, length: 10 });
   }
 
   onSimulationStart() {

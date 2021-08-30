@@ -390,6 +390,18 @@ export default class App extends Component {
       componentEdit: null,
     });
 
+  rotateComponentBy = (component, increment) => {
+    if (component.canRotate) {
+      const configurations = { ...component.configurations };
+      configurations.ORIENTATION = (((configurations.ORIENTATION + increment) % 4) + 4) % 4;
+      this.diagram.handleComponentEdit(component, configurations)
+    }
+  }
+
+  rotateComponentLeft = component => this.rotateComponentBy(component, -1)
+
+  rotateComponentRight = component => this.rotateComponentBy(component, 1)
+
   setTourRunning = isTourRunning => this.setState({ isTourRunning });
 
   showHelpTour = () => this.setTourRunning(true);
@@ -547,6 +559,8 @@ export default class App extends Component {
           redo={this.diagram.redo}
           zoomIn={this.diagram.zoomIn}
           zoomOut={this.diagram.zoomOut}
+          rotateLeft={this.rotateComponentLeft}
+          rotateRight={this.rotateComponentRight}
           configureComponent={this.showEditComponent}
         />
 

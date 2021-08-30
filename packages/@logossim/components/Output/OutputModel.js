@@ -4,7 +4,10 @@ export default class OutputModel extends BaseModel {
   initialize(configurations) {
     this.dataBits = Number(configurations.DATA_BITS);
 
-    this.addInputPort('in', { bits: this.dataBits });
+    this.canRotate = true;
+    this.orientation = configurations.ORIENTATION;
+
+    this.addInputPort('in', { bits: this.dataBits, orientation: (this.orientation + 2) % 4, offset: 0, length: 10 });
   }
 
   getInput() {

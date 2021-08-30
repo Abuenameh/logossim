@@ -47,8 +47,6 @@ const Chevron = ({ className, selected }) => (
 const PositionedChevron = styled(Chevron)`
   position: absolute;
   left: -1px;
-
-  transition: 100ms linear;
 `;
 
 const PositionedPort = styled(Port)`

@@ -15,8 +15,8 @@ const Wrapper = styled.div`
   width: 90px;
   height: 90px;
 
-  transition: 100ms linear;
   svg {
+    transition: 100ms linear;
     fill: ${props =>
       props.selected
         ? 'var(--body-selected)'
@@ -49,16 +49,16 @@ const PositionedPort = styled(Port)`
 
   ${props => {
     if (props.name === 'out') return '';
-    return `top: ${props.position * 15 - 5}px;`;
+    return `${props.edge}: ${props.position * 15 - 5}px;`;
   }}
 
   ${props => {
-    if (props.name === 'out') return 'right: -5px';
-    return 'left: -5px';
+    if (props.name === 'out') return `${props.side}: 88px`;
+    return `${props.side}: 88px`;
   }};
 `;
 
-export const Shape = ({ size = 90, portPositions = [] }) => (
+export const Shape = ({ size = 90, portPositions = [], orientation = 0, portWidth = 0.5, portColor }) => (
   <svg
     height={size}
     width={size}
@@ -70,24 +70,28 @@ export const Shape = ({ size = 90, portPositions = [] }) => (
     <g>
       <path
         d="m 12.810547,2 c 5.50133,9.517685 8.779279,25.095781 8.779297,41.722656 C 21.590006,62.052878 17.611871,78.966668 11.175781,88 H 45 C 68.748245,88.000001 88.005576,45.650843 88,45 87.994195,44.322314 68.748245,1.9999989 45,2 h -0.271484 z"
-        transform="scale(0.26458333)"
+        transform={`scale(0.26458333) rotate(${orientation*90} 45 45)`}
       />
     </g>
-    <g strokeWidth={0.5}>
+    <g
+      transform={`scale(0.26458333) rotate(${orientation*90} 45 45)`}
+      strokeWidth={portWidth}
+      stroke={portColor}
+    >
       {portPositions.includes(1) && (
-        <path d="M 4.8860442,4.1010415 H 0.38245295" />
+        <path d="M 18.4669,15 H 1.44549" />
       )}
       {portPositions.includes(2) && (
-        <path d="M 5.3419835,8.0697915 H 0.38232292" />
+        <path d="M 20.1902,30 H 1.445" />
       )}
       {portPositions.includes(3) && (
-        <path d="M 5.5975927,12.038541 H 0.38232292" />
+        <path d="M 21.1563,45 H 1.445" />
       )}
       {portPositions.includes(4) && (
-        <path d="M 5.2516863,16.007291 H 0.38232292" />
+        <path d="M 19.8489,60 H 1.445" />
       )}
       {portPositions.includes(5) && (
-        <path d="M 4.3916654,19.976041 H 0.38232292" />
+        <path d="M 16.5984,75 H 1.445" />
       )}
     </g>
   </svg>
@@ -98,6 +102,14 @@ const OrWidget = props => {
 
   const inputPorts = Object.values(model.getInputPorts());
   const portPositions = distributePorts(inputPorts.length);
+
+  const portWidth = inputPorts[0].getLineWidth();
+  const portColor = inputPorts[0].getLineColor();
+
+  const orientation = model.orientation;
+  const inputEdges = ['top', 'left', 'top', 'left'];
+  const inputSides = ['right', 'bottom', 'left', 'top'];
+  const outputSides = ['left', 'top', 'right', 'bottom'];
 
   return (
     <Wrapper selected={model.options.selected}>
@@ -111,6 +123,8 @@ const OrWidget = props => {
           <PositionedPort
             name={port.getName()}
             position={portPositions[i]}
+            edge={inputEdges[orientation]}
+            side={inputSides[orientation]}
           />
           {(portPositions[i] < 1 || portPositions[i] > 5) && (
             <PortExtensionConnector
@@ -120,8 +134,16 @@ const OrWidget = props => {
           )}
         </Fragment>
       ))}
-      <PositionedPort name="out" />
-      <Shape portPositions={portPositions} />
+      <PositionedPort
+        name="out"
+        side={outputSides[orientation]}
+      />
+      <Shape
+        portPositions={portPositions}
+        orientation={orientation}
+        portWidth={portWidth}
+        portColor={portColor}
+      />
     </Wrapper>
   );
 };

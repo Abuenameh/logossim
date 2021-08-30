@@ -8,14 +8,16 @@ export default class LedModel extends BaseModel {
       off: configurations.OFF_COLOR,
     };
 
-    this.addInputPort('a', { floating: 0, error: 0 });
-    this.addInputPort('b', { floating: 0, error: 0 });
-    this.addInputPort('c', { floating: 0, error: 0 });
-    this.addInputPort('d', { floating: 0, error: 0 });
-    this.addInputPort('e', { floating: 0, error: 0 });
-    this.addInputPort('f', { floating: 0, error: 0 });
-    this.addInputPort('g', { floating: 0, error: 0 });
-    this.addInputPort('dp', { floating: 0, error: 0 });
+    this.canRotate = false;
+
+    this.addInputPort('a', { floating: 0, error: 0, orientation: 3, offset: 0, length: 10 });
+    this.addInputPort('b', { floating: 0, error: 0, orientation: 3, offset: 0, length: 10 });
+    this.addInputPort('c', { floating: 0, error: 0, orientation: 1, offset: 0, length: 10 });
+    this.addInputPort('d', { floating: 0, error: 0, orientation: 1, offset: 0, length: 10 });
+    this.addInputPort('e', { floating: 0, error: 0, orientation: 1, offset: 0, length: 10 });
+    this.addInputPort('f', { floating: 0, error: 0, orientation: 3, offset: 0, length: 10 });
+    this.addInputPort('g', { floating: 0, error: 0, orientation: 3, offset: 0, length: 10 });
+    this.addInputPort('dp', { floating: 0, error: 0, orientation: 1, offset: 0, length: 10 });
   }
 
   getInput(segment) {
@@ -81,5 +83,36 @@ export default class LedModel extends BaseModel {
   getColor(segment) {
     if (this.isActive(segment)) return this.colors.on;
     return this.colors.off;
+  }
+
+  getSideForSegment(segment) {
+    const SIDES = {
+      a: {
+        side: 'bottom',
+      },
+      b: {
+        side: 'bottom',
+      },
+      c: {
+        side: 'top',
+      },
+      d: {
+        side: 'top',
+      },
+      e: {
+        side: 'top',
+      },
+      f: {
+        side: 'bottom',
+      },
+      g: {
+        side: 'bottom',
+      },
+      dp: {
+        side: 'top',
+      },
+    }
+
+    return SIDES[segment].side;
   }
 }

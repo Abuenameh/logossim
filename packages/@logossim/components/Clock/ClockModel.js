@@ -2,7 +2,10 @@ import { BaseModel } from '@logossim/core';
 
 export default class ClockModel extends BaseModel {
   initialize(configurations) {
-    this.addOutputPort('out');
+    this.canRotate = true;
+    this.orientation = configurations.ORIENTATION;
+
+    this.addOutputPort('out', { orientation: this.orientation, offset: 0, length: 10 });
 
     this.configurations = configurations;
 
