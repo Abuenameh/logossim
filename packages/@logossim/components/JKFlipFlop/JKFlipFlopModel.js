@@ -125,10 +125,6 @@ export default class JKFlipFlopModel extends BaseModel {
       this.emit({ Q: newQ, Qbar: ~newQ });
       return;
     }
-    // return {
-    //   Q: Q,
-    //   Qbar: Qbar,
-    // };
   }
 
   stepError(input, meta) {
@@ -149,9 +145,5 @@ export default class JKFlipFlopModel extends BaseModel {
         Qbar: 'e',
       };
     }
-    // return {
-    //   Q: this.getPort('Q').getValue(),
-    //   Qbar: this.getPort('Qbar').getValue(),
-    // };
   }
 }

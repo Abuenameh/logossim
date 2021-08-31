@@ -6,8 +6,8 @@ import widget from './JKFlipFlopWidget';
 
 export default new Component({
   type: 'JKFlipFlop',
-  name: 'JK Flip-Flop',
-  description: 'JK Flip-Flop',
+  name: 'JK flip-flop',
+  description: 'JK flip-flop',
   group: 'Flip-flops',
   configurations: [
     {
