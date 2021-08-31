@@ -114,13 +114,13 @@ export default class JKFlipFlopModel extends BaseModel {
     }
     const Q = this.getPort('Q').getValue();
     const Qbar = this.getPort('Qbar').getValue();
+    if (!input.Clear) {
+      return {
+        Q: 0,
+        Qbar: 1,
+      };
+    }
     if (this.isRisingEdge(meta)) {
-      if (!input.Clear) {
-        return {
-          Q: 0,
-          Qbar: 1,
-        };
-      }
       const newQ = (~input.K & Q) | (input.J & ~Q);
       return {
         Q: newQ,
