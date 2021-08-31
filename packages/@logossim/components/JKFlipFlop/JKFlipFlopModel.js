@@ -4,13 +4,15 @@ export default class JKFlipFlopModel extends BaseModel {
   initialize(configurations) {
     const DATA_BITS = Number(configurations.DATA_BITS);
 
+    this.initialized = false;
+
     this.triggerOnRising = configurations.TRIGGER_ON === 'rising';
 
-    this.addInputPort('J', { bits: 1, orientation: 2, offset: 0, length: 25 });
-    this.addInputPort('Clock', { bits: 1, orientation: 2, offset: 0, length: 25, complemented: configurations.TRIGGER_ON == 'falling' });
-    this.addInputPort('K', { bits: 1, orientation: 2, offset: 0, length: 25 });
+    this.addInputPort('J', { bits: 1, floating: 0, orientation: 2, offset: 0, length: 25 });
+    this.addInputPort('Clock', { bits: 1, floating: 0, orientation: 2, offset: 0, length: 25, complemented: configurations.TRIGGER_ON == 'falling' });
+    this.addInputPort('K', { bits: 1, floating: 0, orientation: 2, offset: 0, length: 25 });
     this.addInputPort('Clear', { bits: 1, floating: 1, orientation: 2, offset: 0, length: 25, complemented: true });
-    this.addOutputPort('Q', { bits: 1, value: 0, orientation: 0, offset: 0, length: 25 });
+    this.addOutputPort('Q', { bits: 1, orientation: 0, offset: 0, length: 25 });
     this.addOutputPort('Qbar', { bits: 1, orientation: 0, offset: 0, length: 25, complemented: true  });
   }
 
@@ -99,7 +101,40 @@ export default class JKFlipFlopModel extends BaseModel {
   }
 
   step(input, meta) {
-    if (this.ports['output'].some(port => (typeof port.value[0] != 'number'))) {
+    if (!this.initialized) {
+      const initialValues = { Q: 0, Qbar: 1 };
+      this.ports['output'] = this.ports['output'].map(port => {
+        return {
+          ...port,
+          value: [initialValues[port.name]]
+        };
+      });
+      this.emit({ Q: 0, Qbar: 1 });
+      this.initialized = true;
+    }
+    const Q = this.getPort('Q').getValue();
+    const Qbar = this.getPort('Qbar').getValue();
+    if (this.isRisingEdge(meta)) {
+      if (!input.Clear) {
+        return {
+          Q: 0,
+          Qbar: 1,
+        };
+      }
+      const newQ = (~input.K & Q) | (input.J & ~Q);
+      return {
+        Q: newQ,
+        Qbar: ~newQ,
+      };
+    }
+    return {
+      Q: Q,
+      Qbar: Qbar,
+    };
+  }
+
+  stepError(input, meta) {
+    if (!this.initialized) {
       const initialValues = { Q: 0, Qbar: 1 };
       this.ports['output'] = this.ports['output'].map(port => {
         return {
@@ -108,19 +143,17 @@ export default class JKFlipFlopModel extends BaseModel {
         }
       });
       this.emit({ Q: 0, Qbar: 1 })
+      this.initialized = true;
     }
-    const Q = this.getPort('Q').getValue();
-    const Qbar = this.getPort('Qbar').getValue();
-    if (!input.Clear) {
+    if (this.isRisingEdge(meta)) {
       return {
-        Q: 0,
-        Qbar: 1,
-      }
+        Q: 'e',
+        Qbar: 'e',
+      };
     }
-    const newQ = this.isRisingEdge(meta) ? (~input.K & Q) | (input.J & ~Q) : Q;
     return {
-      Q: newQ,
-      Qbar: ~newQ,
+      Q: this.getPort('Q').getValue(),
+      Qbar: this.getPort('Qbar').getValue(),
     };
   }
 }
