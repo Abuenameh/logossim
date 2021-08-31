@@ -26,6 +26,8 @@ import Switch from './Switch/SwitchRegister';
 import Xnor from './Xnor/XnorRegister';
 import Xor from './Xor/XorRegister';
 import JKFlipFlop from './JKFlipFlop/JKFlipFlopRegister'
+import DFlipFlop from './DFlipFlop/DFlipFlopRegister'
+import TFlipFlop from './TFlipFlop/TFlipFlopRegister'
 
 const components = [
   Input,
@@ -56,6 +58,8 @@ const components = [
   Rom,
   Counter,
   JKFlipFlop,
+  DFlipFlop,
+  TFlipFlop,
 ];
 
 export default components;
