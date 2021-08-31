@@ -17,7 +17,7 @@ export default class PortModel extends RDPortModel {
   constructor(options = {}) {
     super({
       type: 'Port',
-      maximumLinks: 1,
+      maximumLinks: 3,
       ...options,
     });
 
