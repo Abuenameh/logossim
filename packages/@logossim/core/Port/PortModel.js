@@ -55,7 +55,7 @@ export default class PortModel extends RDPortModel {
     this.defaultFloatingValue = event.data.defaultFloatingValue;
     this.defaultErrorValue = event.data.defaultErrorValue;
     this.orientation = event.data.orientation;
-    this.complemented = event.data.componented;
+    this.complemented = event.data.complemented;
     this.offset = event.data.offset;
     this.length = event.data.length;
   }
@@ -72,7 +72,7 @@ export default class PortModel extends RDPortModel {
     this.complemented = complemented;
   }
 
-  getComplemented() {
+  isComplemented() {
     return this.complemented;
   }
 

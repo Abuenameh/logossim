@@ -29,6 +29,14 @@ const Circle = styled.div`
   }
 `;
 
+const Bubble = styled.div`
+  width: 10px;
+  height: 10px;
+  border: var(--port-width) solid;
+  border-radius: 100%;
+  background: white;
+`;
+
 class Port extends PortWidget {
   report() {
     if (this.props.port) super.report();
@@ -47,12 +55,13 @@ class Port extends PortWidget {
     const orientation = port.getOrientation()
     const width = port.getLineWidth();
     const length = port.getLength() + port.getOffset();
+    const start = port.isComplemented() ? 10 : 0;
     const widths = [length, 10, length, 10];
     const heights = [10, length, 10, length];
-    const x1s = [0, 5, 0, 5]
-    const x2s = [length, 5, length, 5]
+    const x1s = [start, 5, 0, 5]
+    const x2s = [length, 5, length-start, 5]
     const y1s = [5, 0, 5, 0]
-    const y2s = [5, length, 5, length]
+    const y2s = [5, length-start, 5, length-start]
 
     return (
       <>
@@ -87,7 +96,11 @@ class Port extends PortWidget {
               />
             </g>
           </svg>
-         </Wire>
+        </Wire>
+        {port.isComplemented() ?
+        <Bubble
+          className={`port ${className}`}
+        /> : <></>}
       </>
     );
   }
