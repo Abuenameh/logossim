@@ -41,8 +41,8 @@ export const Shape = styled.div`
 
   background: ${props =>
     props.selected
-      ? 'var(--body-selected)'
-      : 'var(--body-unselected)'};
+      ? 'var(--input-body-selected)'
+      : 'var(--input-body-unselected)'};
   border: 2px solid
     ${props =>
       props.selected

@@ -82,6 +82,12 @@ body {
 
   --body-unselected: rgba(115, 190, 255, var(--selected-opacity));
   --body-selected: rgba(115, 190, 255, var(--unselected-opacity));
+
+  --input-body-unselected: rgba(255, 117, 255, var(--selected-opacity));
+  --input-body-selected: rgba(255, 117, 255, var(--unselected-opacity));
+
+  --output-body-unselected: rgba(255, 186, 117, var(--selected-opacity));
+  --output-body-selected: rgba(255, 186, 117, var(--unselected-opacity));
 }
 
 * {
