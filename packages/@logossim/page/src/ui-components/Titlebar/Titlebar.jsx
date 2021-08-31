@@ -242,6 +242,7 @@ const Titlebar = ({
           onBlur={handleBlurCircuitName}
           onKeyDown={handleNameConfirm}
           maxLength={50}
+          size={40}
         />
         <IconButton onClick={handleNameEditClick}>
           <Edit />
