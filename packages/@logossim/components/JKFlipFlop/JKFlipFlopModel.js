@@ -122,15 +122,13 @@ export default class JKFlipFlopModel extends BaseModel {
     }
     if (this.isRisingEdge(meta)) {
       const newQ = (~input.K & Q) | (input.J & ~Q);
-      return {
-        Q: newQ,
-        Qbar: ~newQ,
-      };
+      this.emit({ Q: newQ, Qbar: ~newQ });
+      return;
     }
-    return {
-      Q: Q,
-      Qbar: Qbar,
-    };
+    // return {
+    //   Q: Q,
+    //   Qbar: Qbar,
+    // };
   }
 
   stepError(input, meta) {
@@ -151,9 +149,9 @@ export default class JKFlipFlopModel extends BaseModel {
         Qbar: 'e',
       };
     }
-    return {
-      Q: this.getPort('Q').getValue(),
-      Qbar: this.getPort('Qbar').getValue(),
-    };
+    // return {
+    //   Q: this.getPort('Q').getValue(),
+    //   Qbar: this.getPort('Qbar').getValue(),
+    // };
   }
 }
