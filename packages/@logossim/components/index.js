@@ -25,6 +25,7 @@ import Ssd from './Ssd/SsdRegister';
 import Switch from './Switch/SwitchRegister';
 import Xnor from './Xnor/XnorRegister';
 import Xor from './Xor/XorRegister';
+import JKFlipFlop from './JKFlipFlop/JKFlipFlopRegister'
 
 const components = [
   Input,
@@ -54,6 +55,7 @@ const components = [
   Ram,
   Rom,
   Counter,
+  JKFlipFlop,
 ];
 
 export default components;
