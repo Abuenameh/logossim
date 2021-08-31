@@ -68,6 +68,7 @@ export default class LinkModel extends RDLinkModel {
 
   addBifurcation(link) {
     if (
+      this.getID() === link.getID() ||
       this.bifurcations.find(
         bifurcation => bifurcation.getID() === link.getID(),
       )
