@@ -23,11 +23,11 @@ const Window = styled.div`
   display: flex;
   flex-direction: column;
 
-  width: 60vw;
-  height: 80vh;
+  width: ${props => `${props.width}vw`};
+  height: ${props => `${props.height}vh`};
 
-  max-width: 600px;
-  max-height: 800px;
+  max-width: ${props => `${props.maxWidth}`};
+  max-height: ${props => `${props.maxHeight}`};
 
   background: white;
 
@@ -39,9 +39,16 @@ const Window = styled.div`
   z-index: 4;
 `;
 
-const Modal = ({ children }) => (
+const Modal = ({ width = 60, height = 80, maxDim = true, children }) => (
   <Overlay>
-    <Window>{children}</Window>
+    <Window
+      width={width}
+      height={height}
+      maxWidth={maxDim ? "600px" : "none"}
+      maxHeight={maxDim ? "800px" : "none"}
+    >
+      {children}
+    </Window>
   </Overlay>
 );
 

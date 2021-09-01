@@ -19,6 +19,8 @@ import ZoomIn from './ZoomIn';
 import ZoomOut from './ZoomOut';
 import RotateLeft from './RotateLeft';
 import RotateRight from './RotateRight';
+import Oscilloscope from './Oscilloscope';
+import Probe from './Probe';
 
 export {
   ArrowLeft,
@@ -42,4 +44,6 @@ export {
   ZoomOut,
   RotateLeft,
   RotateRight,
+  Oscilloscope,
+  Probe,
 };

@@ -2,6 +2,7 @@ import React from 'react';
 
 import ComponentContextMenu from './ComponentContextMenu';
 import DiagramContextMenu from './DiagramContextMenu';
+import LinkContextMenu from './LinkContextMenu';
 
 import 'react-contexify/dist/ReactContexify.min.css';
 
@@ -18,6 +19,7 @@ const ContextMenus = ({
   rotateLeft,
   rotateRight,
   configureComponent,
+  recordSelected,
 }) => (
   <>
     <DiagramContextMenu
@@ -40,6 +42,9 @@ const ContextMenus = ({
       rotateLeft={rotateLeft}
       rotateRight={rotateRight}
       configureComponent={configureComponent}
+    />
+    <LinkContextMenu
+      recordSelected={recordSelected}
     />
   </>
 );

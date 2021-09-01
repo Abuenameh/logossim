@@ -14,6 +14,7 @@ import {
   Titlebar,
   SimulationControlButtons,
   ComponentSelectButton,
+  ShowOscilloscopeButton,
   ComponentSelect,
   ComponentEdit,
   ContextMenus,
@@ -22,6 +23,9 @@ import {
   HelpAbout,
   Snackbar,
   Tour,
+  RecordSelected,
+  LinkRecord,
+  ShowOscilloscope,
 } from './ui-components';
 import tourCircuit, {
   DIMENSIONS,
@@ -40,7 +44,10 @@ export default class App extends Component {
       isComponentEditOpen: false,
       isHelpKeyboardOpen: false,
       isHelpAboutOpen: false,
+      isNameRecordingOpen: false,
+      isOscilloscopeOpen: false,
       componentEdit: null,
+      linkName: null,
       isTourAvailable: false,
       isTourRunning: !JSON.parse(localStorage.getItem('tour-done')),
       circuitName: DEFAULT_CIRCUIT_NAME,
@@ -62,6 +69,7 @@ export default class App extends Component {
       this.showSnackbar,
     );
     this.simulation = new SimulationEngine(components);
+    this.linkRecordings = [];
   }
 
   componentDidMount() {
@@ -94,6 +102,8 @@ export default class App extends Component {
       isComponentEditOpen,
       isHelpKeyboardOpen,
       isHelpAboutOpen,
+      isNameRecordingOpen,
+      isOscilloscopeOpen,
       isCircuitNameFocused,
       isTourRunning,
     } = this.state;
@@ -103,6 +113,8 @@ export default class App extends Component {
       isComponentEditOpen ||
       isHelpKeyboardOpen ||
       isHelpAboutOpen ||
+      isNameRecordingOpen ||
+      isOscilloscopeOpen ||
       isCircuitNameFocused ||
       isTourRunning
     );
@@ -267,6 +279,11 @@ export default class App extends Component {
     Object.entries(diff.links).forEach(([id, value]) =>
       this.diagram.synchronizeLink(id, value),
     );
+    if (this.linkRecordings.some(linkRecord => Object.entries(diff.links).find(
+      ([id]) => id === linkRecord.getID(),
+    ))) {
+      this.linkRecordings.forEach(linkRecord => linkRecord.record())
+    }
 
     this.simulation.clearDiff();
     this.diagram.repaint();
@@ -347,6 +364,8 @@ export default class App extends Component {
     this.diagram.clearSelection();
     this.diagram.setLocked(true);
 
+    this.linkRecordings.forEach(linkRecord => linkRecord.clear())
+
     this.simulation.start(this.diagram.getModel());
     this.renderSimulation();
     this.forceUpdate();
@@ -401,6 +420,42 @@ export default class App extends Component {
   rotateComponentLeft = component => this.rotateComponentBy(component, -1)
 
   rotateComponentRight = component => this.rotateComponentBy(component, 1)
+
+  recordSelected = linkName => {
+    this.diagram.clearSelection();
+
+    this.setState({
+      isNameRecordingOpen: true,
+      linkName,
+    });
+  };
+
+  hideNameRecording = () =>
+    this.setState({
+      isNameRecordingOpen: false,
+      linkName: null,
+    });
+
+  handleLinkRecord = (link, name) => {
+    const newLinkRecord = new LinkRecord(link, name)
+    if (this.diagram.engine.getModel().isLocked()) {
+      return;
+    }
+    if (this.linkRecordings.find(linkRecord => linkRecord.getID() === link.getID())) {
+      alert(`This connection is already being recorded under the name "${this.linkRecordings.find(linkRecord => linkRecord.getID() === link.getID()).getName()}".`)
+      return;
+    }
+    this.linkRecordings.push(newLinkRecord);
+  }
+
+  handleClearLinks = () => {
+    this.linkRecordings = [];
+    this.hideOscilloscope();
+  }
+
+  showOscilloscope = () => this.setState({ isOscilloscopeOpen: true });
+
+  hideOscilloscope = () => this.setState({ isOscilloscopeOpen: false });
 
   setTourRunning = isTourRunning => this.setState({ isTourRunning });
 
@@ -479,7 +534,10 @@ export default class App extends Component {
       isComponentEditOpen,
       isHelpKeyboardOpen,
       isHelpAboutOpen,
+      isNameRecordingOpen,
+      isOscilloscopeOpen,
       componentEdit,
+      linkName,
       isTourAvailable,
       isTourRunning,
       circuitName,
@@ -511,6 +569,10 @@ export default class App extends Component {
         />
         <ComponentSelectButton
           handleClick={this.showAddComponent}
+          disabled={!this.simulation.isStopped()}
+        />
+        <ShowOscilloscopeButton
+          handleClick={this.showOscilloscope}
           disabled={!this.simulation.isStopped()}
         />
 
@@ -562,6 +624,7 @@ export default class App extends Component {
           rotateLeft={this.rotateComponentLeft}
           rotateRight={this.rotateComponentRight}
           configureComponent={this.showEditComponent}
+          recordSelected={this.recordSelected}
         />
 
         <Tooltip id="tooltip" globalEventOff="click" />
@@ -571,6 +634,20 @@ export default class App extends Component {
           message={snackbar.message}
           timeout={snackbar.timeout}
           handleClose={this.hideSnackbar}
+        />
+
+        <RecordSelected
+          isOpen={isNameRecordingOpen}
+          link={linkName}
+          handleClose={this.hideNameRecording}
+          handleLinkRecord={this.handleLinkRecord}
+        />
+
+        <ShowOscilloscope
+          isOpen={isOscilloscopeOpen}
+          linkRecordings={this.linkRecordings}
+          handleClose={this.hideOscilloscope}
+          handleClearLinks={this.handleClearLinks}
         />
       </>
     );

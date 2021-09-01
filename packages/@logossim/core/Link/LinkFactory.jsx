@@ -1,4 +1,5 @@
 import React from 'react';
+import { MenuProvider } from 'react-contexify';
 
 import { DefaultLinkFactory } from '@projectstorm/react-diagrams-defaults';
 
@@ -22,12 +23,16 @@ export default class LinkFactory extends DefaultLinkFactory {
   }
 
   generateReactWidget(event) {
+    const { model } = event;
+
     return (
-      <LinkWidget
-        diagramEngine={this.engine}
-        link={event.model}
-        factory={this}
-      />
+      <MenuProvider id="link" component='g' storeRef={false} data={{component: model}}>
+        <LinkWidget
+          diagramEngine={this.engine}
+          link={event.model}
+          factory={this}
+        />
+      </MenuProvider>
     );
   }
 
