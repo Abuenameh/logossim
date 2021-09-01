@@ -391,7 +391,7 @@ export default class App extends Component {
     });
 
   rotateComponentBy = (component, increment) => {
-    if (component.canRotate) {
+    if (!this.diagram.engine.getModel().isLocked() && component.canRotate) {
       const configurations = { ...component.configurations };
       configurations.ORIENTATION = (((configurations.ORIENTATION + increment) % 4) + 4) % 4;
       this.diagram.handleComponentEdit(component, configurations)
